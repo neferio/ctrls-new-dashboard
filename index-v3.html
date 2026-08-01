@@ -439,7 +439,7 @@ table.matrix.compact .mcell-empty{font-size:10px}
 </div>
 
 <main>
-  <section id="view-exec"><div class="loading"><div class="spinner"></div><div><div id="loadMsg">Fetching live data from MMT&hellip;</div><div class="load-sub" id="loadSub">This usually takes 20&ndash;30 seconds.</div></div></div></section>
+  <section id="view-exec"><div class="loading"><div class="spinner"></div>Fetching live data from MMT…</div></section>
   <section id="view-matrix" hidden></section>
   <section id="view-actions" hidden></section>
 </main>
@@ -1738,19 +1738,13 @@ async function init(){
     renderAll(); switchTab('exec');
   }catch(err){
     clearTimeout(timer);
-    showError(
-      err.name==='AbortError' ? 'The data service did not respond within 90 seconds.'
-      : err.name==='TypeError' ? 'Could not reach the data service \u2014 usually a CORS restriction or a network issue. Check that the endpoint allows requests from this page\u2019s address.'
+    showError(err.name==='AbortError'
+      ? 'The data service did not respond within 90 seconds.'
       : (err.message||'The data pipeline is not ready yet.'));
     console.error(err);
   }
 }
-/* ---- bootstrap: fire whatever the document state, and only once ---- */
-let INIT_STARTED=false;
-function bootstrap(){ if(INIT_STARTED) return; INIT_STARTED=true; init(); }
-if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', bootstrap); }
-else { bootstrap(); }                    /* script parsed after DOMContentLoaded already fired */
-window.addEventListener('load', bootstrap);  /* last-resort safety net */
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

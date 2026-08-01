@@ -414,7 +414,6 @@ table.matrix.compact .mcell-empty{font-size:10px}
 .err-box{max-width:520px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;text-align:center}
 .err-box h2{font-size:15px;margin-bottom:8px}
 .err-box p{font-size:12.5px;color:var(--ink-2)}
-.load-sub{font-size:11.5px;font-weight:600;color:var(--ink-3);margin-top:3px}
 .retry-btn{margin-top:16px;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:9px 22px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .retry-btn:hover{background:var(--accent);border-color:var(--accent)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -451,8 +450,8 @@ table.matrix.compact .mcell-empty{font-size:10px}
    Single-file build. Set ENDPOINT_URL to go live; when null the
    embedded sample payload is used (preview = production).
    ================================================================ */
-const ENDPOINT_URL = "https://api.venwiz.com/dashboard-dump?workspaceId=6a1fd0e3cbc276a31ff1e733"; // CtrlS workspace
-const FETCH_TIMEOUT_MS = 90000; /* MMT workspace dumps currently take 20\u201330s; 90s leaves headroom */
+const ENDPOINT_URL = "https://api.venwiz.com/dashboard-dump?workspaceId=BPCL_WORKSPACE_ID"; // TODO: swap BPCL_WORKSPACE_ID for the CtrlS workspace id
+const FETCH_TIMEOUT_MS = 15000;
 
 /* ---------- status normalization (first layer, per tech contract) ---------- */
 const STATUS_ALIASES = {
@@ -1697,21 +1696,12 @@ function setTabsEnabled(on){
   document.querySelectorAll('.tab').forEach(t=>{ t.disabled=!on; t.style.opacity=on?'':'0.45'; t.style.cursor=on?'':'default'; });
   const sel=document.getElementById('projectSelect'); if(sel) sel.disabled=!on;
 }
-let LOAD_TIMERS=[];
-function clearLoadTimers(){ LOAD_TIMERS.forEach(clearTimeout); LOAD_TIMERS=[]; }
 function showLoading(){
   setTabsEnabled(false);
-  document.querySelector('main').innerHTML='<section id="view-exec"><div class="loading"><div class="spinner"></div>'
-    +'<div><div id="loadMsg">Fetching live data from MMT\u2026</div><div class="load-sub" id="loadSub">This usually takes 20\u201330 seconds.</div></div></div></section>'
+  document.querySelector('main').innerHTML='<section id="view-exec"><div class="loading"><div class="spinner"></div>Fetching live data from MMT\u2026</div></section>'
     +'<section id="view-matrix" hidden></section><section id="view-actions" hidden></section>';
-  clearLoadTimers();
-  const set=(m,sub)=>{ const a=document.getElementById('loadMsg'), b=document.getElementById('loadSub');
-    if(a) a.textContent=m; if(b) b.textContent=sub; };
-  LOAD_TIMERS.push(setTimeout(()=>set('Almost there\u2026','Pulling every PO, lot and milestone for this workspace.'),12000));
-  LOAD_TIMERS.push(setTimeout(()=>set('Taking longer than usual\u2026','Still waiting on the data service.'),45000));
 }
 function showError(msg){
-  clearLoadTimers();
   setTabsEnabled(false);
   document.querySelector('main').innerHTML='<div class="err-box"><h2>Data isn\u2019t available right now</h2>'
     +'<p>'+esc(msg||'The data pipeline is not ready yet.')+'</p>'
@@ -1733,13 +1723,12 @@ async function init(){
     MODELS=RAW.projects.map(buildModel);
     const def=MODELS.findIndex(m=>/pharmacity/i.test(m.name));
     SEL=def>=0?def:0;
-    clearLoadTimers();
     setTabsEnabled(true);
     renderAll(); switchTab('exec');
   }catch(err){
     clearTimeout(timer);
     showError(err.name==='AbortError'
-      ? 'The data service did not respond within 90 seconds.'
+      ? 'The data service did not respond in time.'
       : (err.message||'The data pipeline is not ready yet.'));
     console.error(err);
   }

@@ -41,6 +41,8 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
 /* ============ VERDICT BAND ============ */
 .verdict{max-width:1280px;margin:16px auto 0;padding:0 24px}
+.vchip.link{cursor:pointer;color:var(--accent);border-color:#c4d7f8}
+.vchip.link:hover{background:var(--accent-soft)}
 
 /* ============ TABS ============ */
 .tabs-wrap{width:100%;margin:12px 0 0;padding:0 10px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
@@ -98,6 +100,7 @@ section[hidden]{display:none}
 .chip.clickable{cursor:pointer;font-family:inherit}
 .chip.clickable:hover{box-shadow:0 0 0 2px rgba(37,99,235,.18)}
 .pc-chip{display:inline-block;padding:1px 7px;border-radius:5px;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;font-size:10.5px;font-weight:800}
+.fs-seg.warn{color:var(--st-delayed);border-bottom-color:var(--st-delayed)}
 .fat-card.click{cursor:pointer}
 .fat-card.click:hover{border-color:var(--accent);background:#f8faff}
 .ov{padding:16px 18px}
@@ -105,13 +108,21 @@ section[hidden]{display:none}
 .ov .ov-label .sub{font-weight:600;color:var(--ink-3);text-transform:none;letter-spacing:0;font-size:11px;margin-left:6px}
 .pulse-big{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
 .pulse-big small{font-size:15px;font-weight:600;color:var(--ink-2)}
+.pulse-note.bad{color:var(--st-delayed)} .pulse-note.good{color:var(--st-complete)}
 .pulse-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px}
+
+.stackbar .seg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;min-width:0}
+.stackbar .seg.darktext{color:#3d2f04}
+.sb-legend .li{font-size:11.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
+.sb-legend .dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
 
 .act-big{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
 .act-big small{font-size:13px;font-weight:600;color:var(--ink-2)}
 .act-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .act-link{margin-top:12px;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;display:inline-block}
 .act-link:hover{text-decoration:underline}
+.fat-next.click{cursor:pointer}
+.fat-next.click:hover{border-color:var(--accent);background:#f4f7ff}
 .fn-v{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--ink);margin-top:2px}
 .fn-s{font-size:11.5px;color:var(--ink-2);margin-top:2px;font-weight:600}
 .fn-cta{font-size:11px;font-weight:700;color:var(--accent);margin-top:6px}
@@ -205,6 +216,11 @@ section[hidden]{display:none}
 .cell-date .cell-sub{margin-top:1px}
 
 .bullet{width:100%;max-width:170px}
+.bullet .btrack{height:10px;background:#edf0f4;border:1px solid var(--line-soft);border-radius:6px;position:relative}
+.bullet .bfill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:6px 0 0 6px}
+.bullet .btick{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.bullet .bverdict{font-size:11px;font-weight:700;margin-top:4px}
+.bullet .bverdict.bad{color:var(--st-delayed)} .bullet .bverdict.good{color:var(--st-complete)} .bullet .bverdict.neutral{color:var(--ink-2)}
 
 /* custom tooltip (native title rejected) */
 .tt{position:relative;cursor:help;border-bottom:1px dotted var(--ink-3)}
@@ -223,7 +239,10 @@ table.matrix tbody th{background:#fafbfc;font-size:12.5px;font-weight:700;color:
 table.matrix td{background:#fff;text-align:center;vertical-align:middle;min-width:86px}
 .mcell{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;min-height:34px;padding:6px 4px;font-size:11px;font-weight:800;line-height:1.2;cursor:pointer;border:none;font-family:inherit;background:transparent}
 .mcell:hover{box-shadow:inset 0 0 0 2px rgba(15,23,40,.55)}
+.mcell .mc-n{font-size:9px;font-weight:800;opacity:.75}
 .mcell .mc-qty.dot-only{opacity:.35}
+.mcell .mc-top{font-size:11px;font-weight:800}
+.mcell .mc-sub{font-size:11px;font-weight:600;color:var(--ink-2)}
 table.matrix td.st-delayed{background:var(--st-delayed-bg)} .mcell.st-delayed{color:#991b1b}
 table.matrix td.st-high{background:var(--st-high-bg)} .mcell.st-high{color:#9a3412}
 table.matrix td.st-medium{background:var(--st-medium-bg)} .mcell.st-medium{color:#92400e}
@@ -262,7 +281,17 @@ table.matrix.compact .mcell-empty{font-size:10px}
 .legend-row .dot{width:9px;height:9px;border-radius:3px}
 
 /* ============ WATCHLIST ============ */
-@media(max-width:980px){}
+@media(max-width:980px){.wcard{grid-template-columns:1fr}}
+.wc-stat .l{font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.03em}
+.wc-stat .v{font-size:13.5px;font-weight:700;margin-top:1px}
+.wc-stat .v small{font-weight:600;color:var(--ink-2);font-size:11.5px}
+.procbar .l{font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.03em}
+.procbar .pv{font-size:11px;font-weight:700;color:var(--ink-2);margin-top:3px}
+.wc-issues .l{font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.iss-line.expanded{-webkit-line-clamp:unset}
+
+/* FAT radar table */
+.fat-table td.strong{font-weight:700;color:var(--ink)}
 
 /* ============ ACTIONS TRACKER ============ */
 .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
@@ -362,6 +391,8 @@ table.matrix.compact .mcell-empty{font-size:10px}
 .itbl .caret{display:inline-block;transition:transform .12s;font-size:10px;color:var(--ink-3);margin-right:6px}
 .itbl tr.open .caret{transform:rotate(90deg)}
 .ms-wrap{background:#fafbfc;padding:12px 14px 14px}
+.phase-chip.done{border-color:#bfe3c8;color:#15803d;background:var(--st-complete-bg)}
+.phase-chip.active{border-color:var(--accent);color:#1d4ed8;background:var(--accent-soft)}
 .mtbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
 .mtbl th{font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;text-align:left;padding:7px 10px;border-bottom:1px solid var(--line-soft);background:#fafbfc;white-space:nowrap}
 .mtbl td{font-size:11.5px;color:var(--ink-2);padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
@@ -384,10 +415,6 @@ table.matrix.compact .mcell-empty{font-size:10px}
 .err-box h2{font-size:15px;margin-bottom:8px}
 .err-box p{font-size:12.5px;color:var(--ink-2)}
 .load-sub{font-size:11.5px;font-weight:600;color:var(--ink-3);margin-top:3px}
-.dl-btn{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.10);color:#fff;border-radius:8px;padding:7px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;margin-right:14px}
-.dl-btn:hover:not(:disabled){background:var(--accent);border-color:var(--accent)}
-.dl-btn:disabled{opacity:.55;cursor:default}
-@media(max-width:600px){.dl-btn{padding:6px 10px;font-size:11px;margin-right:8px}}
 .retry-btn{margin-top:16px;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:9px 22px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .retry-btn:hover{background:var(--accent);border-color:var(--accent)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -399,7 +426,6 @@ table.matrix.compact .mcell-empty{font-size:10px}
   <div class="brand">CtrlS Dashboard</div>
   <select id="projectSelect" aria-label="Select project"></select>
   <div class="spacer"></div>
-  <button class="dl-btn" data-act="download-report" title="Download this project as an Excel report">↓ Download Report</button>
   <div class="fresh" id="freshness"></div>
 </header>
 
@@ -1575,475 +1601,6 @@ function msRowHTML(M){
   +'</tr>';
 }
 
-
-/* ================================================================
-   EXCEL REPORT EXPORT
-   Self-contained .xlsx writer (zip "store" + OOXML). No libraries.
-   Mirrors the team's weekly report: bird's-eye block, hierarchical
-   Package > Vendor > Lot table (grouped, collapsed), risk mapping,
-   and the issues / actionables register.
-   ================================================================ */
-const XL_NS='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
-function xesc(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
-  .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,''); }
-function xlRun(text,o){
-  o=o||{};
-  return '<r><rPr>'+(o.b?'<b/>':'')+'<sz val="'+(o.sz||11)+'"/>'
-    +(o.color?'<color rgb="'+o.color+'"/>':'')+'<rFont val="Arial"/><family val="2"/></rPr>'
-    +'<t xml:space="preserve">'+xesc(text)+'</t></r>';
-}
-function colName(n){ let s=''; while(n>0){ const m=(n-1)%26; s=String.fromCharCode(65+m)+s; n=(n-m-1)/26; } return s; }
-function dateSerial(iso){
-  if(!iso) return null;
-  const d=new Date(iso+(String(iso).length===10?'T00:00:00Z':''));
-  if(isNaN(d)) return null;
-  return Math.floor((d.getTime()-Date.UTC(1899,11,30))/86400000);
-}
-
-/* ---------- CRC32 + minimal ZIP (stored) ---------- */
-const CRC_TABLE=(()=>{ const t=new Uint32Array(256);
-  for(let i=0;i<256;i++){ let c=i; for(let k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); t[i]=c>>>0; } return t; })();
-function crc32(buf){ let c=0xFFFFFFFF; for(let i=0;i<buf.length;i++) c=CRC_TABLE[(c^buf[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
-function zipStore(files){
-  const enc=new TextEncoder(); const parts=[]; const central=[]; let offset=0;
-  const now=new Date();
-  const dosTime=((now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()/2))&0xFFFF;
-  const dosDate=(((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate())&0xFFFF;
-  const u16=v=>[v&0xFF,(v>>8)&0xFF];
-  const u32=v=>[v&0xFF,(v>>8)&0xFF,(v>>16)&0xFF,(v>>>24)&0xFF];
-  files.forEach(f=>{
-    const name=enc.encode(f.name), data=enc.encode(f.data), crc=crc32(data);
-    const local=[].concat([0x50,0x4B,0x03,0x04],u16(20),u16(0),u16(0),u16(dosTime),u16(dosDate),
-      u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0));
-    parts.push(new Uint8Array(local),name,data);
-    central.push({name,crc,size:data.length,offset});
-    offset+=local.length+name.length+data.length;
-  });
-  const cd=[];
-  central.forEach(c=>{
-    const h=[].concat([0x50,0x4B,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(dosTime),u16(dosDate),
-      u32(c.crc),u32(c.size),u32(c.size),u16(c.name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(c.offset));
-    cd.push(new Uint8Array(h),c.name);
-  });
-  const cdSize=cd.reduce((a,b)=>a+b.length,0);
-  const eocd=new Uint8Array([].concat([0x50,0x4B,0x05,0x06],u16(0),u16(0),u16(central.length),u16(central.length),
-    u32(cdSize),u32(offset),u16(0)));
-  const all=parts.concat(cd,[eocd]);
-  const total=all.reduce((a,b)=>a+b.length,0);
-  const out=new Uint8Array(total); let p=0;
-  all.forEach(b=>{ out.set(b,p); p+=b.length; });
-  return out;
-}
-
-/* ---------- styles ----------
-   fonts 0 body | 1 bold | 2 bold white | 3 small grey | 4 title | 5 bold white small
-   fills 0 none | 1 gray125 | 2 navy | 3 grey | 4 red | 5 orange | 6 amber | 7 yellow | 8 blue | 9 green | 10 slate | 11 soft blue */
-const ST={ BODY:0, BOLD:1, HEAD:2, SUB:3, TITLE:4, DATE:5, DATE_B:6, NUM:7, NUM_B:8,
-  PKG:9, VEN:10, LOT:11, S_DEL:12, S_HIGH:13, S_MED:14, S_LOW:15, S_OT:16, S_CMP:17, S_NS:18,
-  KPI_L:19, KPI_V:20, SECT:21, WRAP:22, MARK:23,
-  D_DEL:24, D_HIGH:25, D_MED:26, D_LOW:27, D_OT:28, D_CMP:29, D_NS:30,
-  T_DEL:31, T_HIGH:32, T_MED:33, T_LOW:34, T_OT:35, T_CMP:36, T_NS:37,
-  CEN:38, CEN_B:39, WORD:40, SUBW:41, NOTE:42,
-  L_DEL:43, L_HIGH:44, L_MED:45, L_LOW:46, L_OT:47, L_CMP:48, L_NS:49,
-  BAND:50, SMALL:51, SMALL_C:52 };
-function stylesXml(){
-  const fonts=[
-    '<font><sz val="12"/><color rgb="FF1F2933"/><name val="Arial"/></font>',                 /*0*/
-    '<font><b/><sz val="12"/><color rgb="FF1F2933"/><name val="Arial"/></font>',              /*1*/
-    '<font><b/><sz val="12"/><color rgb="FFFFFFFF"/><name val="Arial"/></font>',              /*2*/
-    '<font><sz val="11"/><color rgb="FF6B7280"/><name val="Arial"/></font>',                  /*3*/
-    '<font><b/><sz val="16"/><color rgb="FFFFFFFF"/><name val="Arial"/></font>',              /*4*/
-    '<font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font>',              /*5*/
-    '<font><b/><sz val="20"/><color rgb="FF4DA3FF"/><name val="Arial"/></font>',              /*6*/
-    '<font><i/><sz val="11"/><color rgb="FF9AA5B1"/><name val="Arial"/></font>',              /*7*/
-    '<font><sz val="10"/><color rgb="FF334155"/><name val="Arial"/></font>'                   /*8 package list*/
-  ];
-  const F=['FF1E2A3A','FFEEF1F5','FFFDECEA','FFFDF0E7','FFFEF4E2','FFFCF8E0','FFE8F1FC','FFE9F6EC','FFF2F4F7','FFF7FAFF',
-           'FFB91C1C','FFC2410C','FFB45309','FFA16207','FF1D4ED8','FF15803D','FF475569','FF334155'];
-  const fills=['<fill><patternFill patternType="none"/></fill>','<fill><patternFill patternType="gray125"/></fill>']
-    .concat(F.map(c=>'<fill><patternFill patternType="solid"><fgColor rgb="'+c+'"/><bgColor indexed="64"/></patternFill></fill>'));
-  const borders=[
-    '<border><left/><right/><top/><bottom/><diagonal/></border>',
-    '<border><left style="thin"><color rgb="FFD5DAE2"/></left><right style="thin"><color rgb="FFD5DAE2"/></right><top style="thin"><color rgb="FFD5DAE2"/></top><bottom style="thin"><color rgb="FFD5DAE2"/></bottom><diagonal/></border>'
-  ];
-  const C='horizontal="center" vertical="center"', CW=C+' wrapText="1"', L='vertical="center"', LW=L+' wrapText="1"';
-  const xf=(f,fi,b,nf,al)=>'<xf numFmtId="'+(nf||0)+'" fontId="'+f+'" fillId="'+fi+'" borderId="'+b+'"'
-    +' applyFont="1" applyFill="1" applyBorder="1"'+(al?' applyAlignment="1"><alignment '+al+'/></xf>':'/>');
-  const D=166;
-  const cellXfs=[
-    xf(0,0,1,0,L),xf(1,0,1,0,L),xf(2,2,1,0,CW),xf(3,0,1,0,L),xf(4,2,0,0,L),
-    xf(0,0,1,D,C),xf(1,0,1,D,C),
-    xf(0,0,1,0,'horizontal="right" vertical="center"'),xf(1,0,1,0,'horizontal="right" vertical="center"'),
-    xf(1,3,1,0,L),xf(1,11,1,0,L),xf(0,0,1,0,L),
-    xf(1,4,1,0,CW),xf(1,5,1,0,CW),xf(1,6,1,0,CW),xf(1,7,1,0,CW),xf(1,8,1,0,CW),xf(1,9,1,0,CW),xf(1,10,1,0,CW),
-    xf(5,2,1,0,C),xf(1,3,1,0,C),xf(2,2,1,0,L),xf(0,0,1,0,LW),xf(7,0,1,0,LW),
-    xf(2,12,1,0,C),xf(2,13,1,0,C),xf(2,14,1,0,C),xf(2,15,1,0,C),xf(2,16,1,0,C),xf(2,17,1,0,C),xf(2,18,1,0,C),
-    xf(1,4,1,0,CW),xf(1,5,1,0,CW),xf(1,6,1,0,CW),xf(1,7,1,0,CW),xf(1,8,1,0,CW),xf(1,9,1,0,CW),xf(1,10,1,0,CW),
-    xf(0,0,1,0,C),xf(1,0,1,0,C),xf(6,2,0,0,C),xf(3,2,0,0,L),xf(7,0,1,0,L),
-    xf(8,4,1,0,CW),xf(8,5,1,0,CW),xf(8,6,1,0,CW),xf(8,7,1,0,CW),xf(8,8,1,0,CW),xf(8,9,1,0,CW),xf(8,10,1,0,CW), /*43-49 package lists*/
-    xf(2,19,1,0,C),          /*50 BAND*/
-    xf(8,0,1,0,LW),          /*51 SMALL*/
-    xf(8,0,1,0,CW)           /*52 SMALL_C*/
-  ];
-  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    +'<styleSheet xmlns="'+XL_NS+'">'
-    +'<numFmts count="1"><numFmt numFmtId="166" formatCode="dd mmm yy"/></numFmts>'
-    +'<fonts count="'+fonts.length+'">'+fonts.join('')+'</fonts>'
-    +'<fills count="'+fills.length+'">'+fills.join('')+'</fills>'
-    +'<borders count="'+borders.length+'">'+borders.join('')+'</borders>'
-    +'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
-    +'<cellXfs count="'+cellXfs.length+'">'+cellXfs.join('')+'</cellXfs>'
-    +'<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
-    +'</styleSheet>';
-}
-const STATUS_DARK={'Delayed':ST.D_DEL,'High Risk':ST.D_HIGH,'Medium Risk':ST.D_MED,'Low Risk':ST.D_LOW,
-  'On Track':ST.D_OT,'Completed':ST.D_CMP,'Not Yet Started':ST.D_NS};
-const STATUS_TINT={'Delayed':ST.T_DEL,'High Risk':ST.T_HIGH,'Medium Risk':ST.T_MED,'Low Risk':ST.T_LOW,
-  'On Track':ST.T_OT,'Completed':ST.T_CMP,'Not Yet Started':ST.T_NS};
-const STATUS_LIST={'Delayed':ST.L_DEL,'High Risk':ST.L_HIGH,'Medium Risk':ST.L_MED,'Low Risk':ST.L_LOW,
-  'On Track':ST.L_OT,'Completed':ST.L_CMP,'Not Yet Started':ST.L_NS};
-
-/* ---------- sheet builder ---------- */
-function fitH(cells,widths,base){
-  let lines=1;
-  (cells||[]).forEach((c,i)=>{
-    if(!c||c.v==null) return;
-    const w=Math.max(6,(widths[i]||14)-2);
-    String(c.v).split('\n').forEach(seg=>{ lines=Math.max(lines,Math.ceil(String(seg).length/w)); });
-  });
-  return Math.max(base, Math.min(lines,8)*15+8);
-}
-function sheetXml(rows,opts){
-  opts=opts||{};
-  let maxCol=1;
-  const body=rows.map((row,ri)=>{
-    const r=ri+1; const cells=(row.cells||[]);
-    let out='';
-    cells.forEach((c,ci)=>{
-      if(c==null) return;
-      const empty=(c.v==null||c.v==='');
-      if(empty && c.s==null) return;
-      if(empty){ out+='<c r="'+colName(ci+1)+r+'" s="'+c.s+'"/>'; maxCol=Math.max(maxCol,ci+1); return; }
-      const ref=colName(ci+1)+r; maxCol=Math.max(maxCol,ci+1);
-      const s=c.s!=null?' s="'+c.s+'"':'';
-      if(c.t==='r') out+='<c r="'+ref+'"'+s+' t="inlineStr"><is>'+c.v+'</is></c>';
-      else if(c.t==='n') out+='<c r="'+ref+'"'+s+'><v>'+c.v+'</v></c>';
-      else if(c.t==='d'){ const sv=dateSerial(c.v); out+= sv==null
-        ? '<c r="'+ref+'"'+s+' t="inlineStr"><is><t>'+xesc(c.v)+'</t></is></c>'
-        : '<c r="'+ref+'"'+s+'><v>'+sv+'</v></c>'; }
-      else out+='<c r="'+ref+'"'+s+' t="inlineStr"><is><t xml:space="preserve">'+xesc(c.v)+'</t></is></c>';
-    });
-    const attrs=[' r="'+r+'"'];
-    const hh = row.h!=null ? row.h : (opts.autoFit ? fitH(cells,opts.widths||[],opts.baseH||20) : null);
-    if(hh) attrs.push(' ht="'+hh+'" customHeight="1"');
-    if(row.level) attrs.push(' outlineLevel="'+row.level+'"');
-    if(row.hidden) attrs.push(' hidden="1"');
-    if(row.collapsed) attrs.push(' collapsed="1"');
-    return '<row'+attrs.join('')+'>'+out+'</row>';
-  }).join('');
-
-  const cols=(opts.widths||[]).map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('');
-  const freeze=opts.freeze
-    ? '<pane ySplit="'+opts.freeze+'" topLeftCell="A'+(opts.freeze+1)+'" activePane="bottomLeft" state="frozen"/>'
-      +'<selection pane="bottomLeft" activeCell="A'+(opts.freeze+1)+'" sqref="A'+(opts.freeze+1)+'"/>'
-    : '';
-  const merges=(opts.merges||[]);
-  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    +'<worksheet xmlns="'+XL_NS+'">'
-    +'<sheetPr><outlinePr summaryBelow="0" summaryRight="0"/></sheetPr>'
-    +'<dimension ref="A1:'+colName(maxCol)+Math.max(rows.length,1)+'"/>'
-    +'<sheetViews><sheetView showGridLines="0"'+(opts.tabSelected?' tabSelected="1"':'')+' workbookViewId="0">'+freeze+'</sheetView></sheetViews>'
-    +'<sheetFormatPr defaultRowHeight="14"'+(opts.outlineLevels?' outlineLevelRow="'+opts.outlineLevels+'"':'')+'/>'
-    +(cols?'<cols>'+cols+'</cols>':'')
-    +'<sheetData>'+body+'</sheetData>'
-    +(merges.length?'<mergeCells count="'+merges.length+'">'+merges.map(m=>'<mergeCell ref="'+m+'"/>').join('')+'</mergeCells>':'')
-    +(opts.filter?'<autoFilter ref="'+opts.filter+'"/>':'')
-    +'<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/>'
-    +'<pageSetup orientation="landscape" fitToWidth="1" paperSize="9"/>'
-    +'</worksheet>';
-}
-
-/* ---------- sheet 1: executive summary ---------- */
-function xlSheetExec(m){
-  const rows=[]; const merges=[];
-  const T=(v,s)=>({v:v,s:s});
-  const N=(v,s)=>(v==null?null:{v:v,t:'n',s:s==null?ST.NUM:s});
-  const D=(v,s)=>(v?{v:v,t:'d',s:s==null?ST.DATE:s}:null);
-  const fill=(n,st)=>Array(n).fill(T('',st));
-  const NCOL=13;   /* 3 dispatch + 7 risk + 3 actions */
-
-  rows.push({h:34,cells:[T('venwiz',ST.WORD),T('CtrlS EXPEDITING REPORT \u2014 '+m.name,ST.TITLE)].concat(fill(NCOL-2,ST.TITLE))});
-  rows.push({h:22,cells:[T('',ST.WORD),T('Generated from MMT on '+fmtDT(RAW.lastUpdated),ST.SUBW)].concat(fill(NCOL-2,ST.SUBW))});
-  merges.push('A1:A2','B1:'+colName(NCOL)+'1','B2:'+colName(NCOL)+'2');
-
-  rows.push({h:24,cells:[T("BIRD'S EYE VIEW",ST.SECT)].concat(fill(NCOL-1,ST.SECT))});
-  merges.push('A3:'+colName(NCOL)+'3');
-  const R0=rows.length+1;
-  rows.push({h:24,cells:[T('DISPATCH SUMMARY',ST.KPI_L),T('',ST.KPI_L),T('',ST.KPI_L),
-    T('RISK VIEW \u2014 PACKAGES',ST.KPI_L)].concat(fill(6,ST.KPI_L),
-    [T('EXPEDITING ACTIONS',ST.KPI_L),T('',ST.KPI_L),T('',ST.KPI_L)])});
-  merges.push('A'+R0+':C'+R0,'D'+R0+':J'+R0,'K'+R0+':M'+R0);
-
-  const order=['Delayed','High Risk','Medium Risk','Low Risk','On Track','Not Yet Started','Completed'];
-  const shown=order.map(st=>({st:st,pk:m.packages.filter(p=>p.statusLabel===st)}));   /* every status, always */
-
-  const del=m.qty.delivered, exp=m.qty.expected, tot=m.qty.total;
-  const iss=m.issues, open=iss.filter(i=>i.status==='open').length;
-
-  rows.push({h:30,cells:[
-    T('Total Qty',ST.KPI_V),T('Planned till date',ST.KPI_V),T('Delivered',ST.KPI_V)]
-    .concat(shown.map(b=>T(b.st,STATUS_DARK[b.st])),
-      [T('Total',ST.KPI_V),T('Open',ST.KPI_V),T('Closed',ST.KPI_V)])});
-  rows.push({h:28,cells:[N(tot,ST.CEN_B),N(exp,ST.CEN_B),N(del,ST.CEN_B)]
-    .concat(shown.map(b=>N(b.pk.length,STATUS_TINT[b.st])),
-      [N(iss.length,ST.CEN_B),N(open,ST.CEN_B),N(iss.length-open,ST.CEN_B)])});
-
-  /* one cell per bucket, packages comma separated in a smaller font */
-  const listRow=rows.length+1;
-  const names=b=>b.pk.map(p=>p.name).join(', ')||'\u2014';
-  const listCells=[
-    T('Overall '+(tot?Math.round(del/tot*100):0)+'% delivered'
-      +(exp>del?('  \u00b7  '+num(exp-del)+' units behind plan'):'  \u00b7  on plan'),ST.SMALL_C),T('',ST.SMALL_C),T('',ST.SMALL_C)]
-    .concat(shown.map(b=>T(names(b),STATUS_LIST[b.st])),
-      [T(iss.length?(Math.round((iss.length-open)/iss.length*100)+'% closed'):'None raised',ST.SMALL_C),T('',ST.SMALL_C),T('',ST.SMALL_C)]);
-  const listH=Math.max(46, Math.min(8,Math.ceil(Math.max.apply(null,shown.map(b=>names(b).length))/14))*15+10);
-  rows.push({h:listH,cells:listCells});
-  merges.push('A'+listRow+':C'+listRow,'K'+listRow+':M'+listRow);
-
-  const pr=rows.length+1;
-  rows.push({h:28,cells:[T('PROJECT STATUS \u2014 '+m.name+': '+m.statusLabel
-      +'   \u00b7   PDD '+fmtD(m.plannedEnd)+'   \u00b7   EDD '+fmtD(m.estEnd)
-      +(m.slip>0?('   \u00b7   running '+m.slip+' days late'):'   \u00b7   on plan'),STATUS_DARK[m.statusLabel]||ST.SECT)]
-    .concat(fill(NCOL-1,STATUS_DARK[m.statusLabel]||ST.SECT))});
-  merges.push('A'+pr+':'+colName(NCOL)+pr);
-  rows.push({h:8,cells:[]});
-
-  const HEAD=['Package / Vendor / Lot','Level','Qty','Planned till date','Delivered','PDD','EDD','Est Delay (days)','Risk','Open Actions'];
-  const headRow=rows.length+1;
-  const nameSpan=r=>{ merges.push('A'+r+':D'+r); };          /* name cell spans A:D so the grid reaches column M */
-  rows.push({h:38,cells:[T(HEAD[0],ST.HEAD),T('',ST.HEAD),T('',ST.HEAD),T('',ST.HEAD)]
-    .concat(HEAD.slice(1).map(h=>T(h,ST.HEAD)))});
-  nameSpan(headRow);
-
-  const packages=[...m.packages].sort((a,b)=>stRank(a.statusLabel)-stRank(b.statusLabel)||(b.delayDays||0)-(a.delayDays||0));
-  packages.forEach(P=>{
-    nameSpan(rows.length+1);
-    rows.push({h:24,collapsed:1,cells:[
-      T(P.name,ST.PKG),T('',ST.PKG),T('',ST.PKG),T('',ST.PKG),
-      T('Package',ST.PKG),N(P.qty.total,ST.NUM_B),N(P.qty.expected,ST.NUM_B),N(P.qty.delivered,ST.NUM_B),
-      D(P.cdd,ST.DATE_B),D(P.edd,ST.DATE_B),N(P.delayDays||0,ST.NUM_B),
-      T(P.statusLabel,STATUS_TINT[P.statusLabel]||ST.BOLD),N(P.openIssues,ST.NUM_B)]});
-    const byVen={};
-    P.pos.forEach(po=>{ (byVen[po.vendorKey]=byVen[po.vendorKey]||[]).push(po); });
-    Object.values(byVen).forEach(pos=>{
-      const V=rollup(pos[0].vendor,pos,'vendor');
-      nameSpan(rows.length+1);
-      rows.push({h:22,level:1,hidden:1,collapsed:1,cells:[
-        T('   '+V.name,ST.VEN),T('',ST.VEN),T('',ST.VEN),T('',ST.VEN),
-        T('Vendor',ST.VEN),N(V.qty.total),N(V.qty.expected),N(V.qty.delivered),
-        D(V.cdd),D(V.edd),N(V.slip||0),
-        T(V.statusLabel,STATUS_TINT[V.statusLabel]||ST.BODY),
-        N(pos.reduce((a,p)=>a+p.issues.filter(i=>i.status==='open').length,0))]});
-      pos.forEach(po=>po.items.forEach(I=>{
-        nameSpan(rows.length+1);
-        rows.push({h:22,level:2,hidden:1,cells:[
-          T('      '+I.name,ST.LOT),T('',ST.LOT),T('',ST.LOT),T('',ST.LOT),
-          T('Lot \u00b7 PO '+po.poNumber+(po.projectCode?' \u00b7 '+po.projectCode:''),ST.SMALL),
-          N(I.qty.total),N(I.qty.expectedTillDate),N(I.qty.delivered),
-          D(I.cdd),D(I.edd),N(I.slip||0),
-          T(I.statusLabel,STATUS_TINT[I.statusLabel]||ST.BODY),
-          N(I.issues.filter(i=>i.status==='open').length)]});
-      }));
-    });
-  });
-  return sheetXml(rows,{widths:[14,13,12,14,15,14,15,14,15,14,15,16,14],freeze:headRow,merges:merges,
-    outlineLevels:2,tabSelected:true,autoFit:true,baseH:22});
-}
-
-/* ---------- sheet 2: procurement & FAT by package ---------- */
-function xlSheetDeepDive(m){
-  const rows=[]; const merges=[];
-  const T=(v,s)=>({v:v,s:s});
-  const N=(v,s)=>(v==null?null:{v:v,t:'n',s:s==null?ST.CEN:s});
-  const D=(v,s)=>(v?{v:v,t:'d',s:s==null?ST.DATE:s}:null);
-  const today=new Date().toISOString().slice(0,10);
-  const NC=17;
-
-  rows.push({h:34,cells:[T('venwiz',ST.WORD),T('RISK DEEP DIVE \u2014 '+m.name,ST.TITLE)].concat(Array(NC-2).fill(T('',ST.TITLE)))});
-  rows.push({h:22,cells:[T('',ST.WORD),T('Every package \u00b7 procurement progress \u00b7 FAT pending and upcoming \u00b7 the lot driving the risk',ST.SUBW)]
-    .concat(Array(NC-2).fill(T('',ST.SUBW)))});
-  merges.push('A1:A2','B1:'+colName(NC)+'1','B2:'+colName(NC)+'2');
-
-  const R=3;
-  rows.push({h:22,cells:[T('PACKAGE',ST.BAND),T('',ST.BAND),T('',ST.BAND),T('',ST.BAND),T('',ST.BAND),
-    T('PROCUREMENT',ST.BAND),T('',ST.BAND),T('',ST.BAND),T('',ST.BAND),
-    T('FAT',ST.BAND),T('',ST.BAND),T('',ST.BAND),T('',ST.BAND),
-    T('MOST CRITICAL LOT',ST.BAND),T('',ST.BAND),T('',ST.BAND),T('',ST.BAND)]});
-  merges.push('A'+R+':E'+R,'F'+R+':I'+R,'J'+R+':M'+R,'N'+R+':Q'+R);
-  rows.push({h:40,cells:['Package','Overall status','Vendors','Progress (actual vs target)','Est Delay (days)',
-    'Milestones done','Actual %','Expected %','Status',
-    'Pending','Overdue','Next FAT','Status',
-    'Lot','Qty (delivered / total)','Risk','EDD'].map(h=>T(h,ST.HEAD))});
-
-  const packages=[...m.packages].sort((a,b)=>stRank(a.statusLabel)-stRank(b.statusLabel)||(b.delayDays||0)-(a.delayDays||0));
-  packages.forEach(P=>{
-    const pos=P.pos;
-    /* procurement */
-    let pc=T('Not tracked in MMT',ST.SMALL_C), pd=T('\u2014',ST.CEN), pa=T('\u2014',ST.CEN), pe=T('\u2014',ST.CEN);
-    if(m.hasProcData){
-      const pms=procMsOf(pos), ps=pms.length?procStatFor(pms,today):null;
-      if(ps){
-        const done=ps.total>0&&ps.done===ps.total, behind=(ps.exp-ps.act)>1;
-        pd=T(ps.done+' of '+ps.total,ST.CEN_B); pa=T(pct(ps.act),ST.CEN); pe=T(pct(ps.exp),ST.CEN);
-        pc=T(done?'Complete':(behind?'Behind plan':'On plan'), done?ST.T_CMP:(behind?ST.T_DEL:ST.T_OT));
-      } else { pc=T('No procurement milestones',ST.SMALL_C); }
-    }
-    /* FAT */
-    let fp=T('\u2014',ST.CEN), fo=T('\u2014',ST.CEN), fn=T('Not tracked in MMT',ST.SMALL_C), fs=T('\u2014',ST.CEN);
-    if(m.hasFatData){
-      const groups=[]; pos.forEach(po=>(po.fatSched||[]).forEach(g=>groups.push(g)));
-      const fatTotal=pos.reduce((a,po)=>a+(po.fatTotal||0),0), fatDone=pos.reduce((a,po)=>a+(po.fatDone||0),0);
-      const od=groups.filter(g=>g.date&&g.date<today), up=groups.filter(g=>!g.date||g.date>=today)
-        .sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999')));
-      fp=T(String(groups.length),ST.CEN_B); fo=T(String(od.length),od.length?ST.T_DEL:ST.CEN);
-      fn=up.length?D(up[0].date,ST.DATE_B):T(groups.length?'None scheduled':'\u2014',ST.SMALL_C);
-      fs=!fatTotal?T('No FAT on this package',ST.SMALL_C)
-        :(!groups.length?T('All completed ('+fatDone+' of '+fatTotal+')',ST.T_CMP)
-        :(od.length?T(od.length+' pending past plan',ST.T_DEL):T(up.length+' upcoming',ST.T_OT)));
-    }
-    /* most critical lot */
-    let crit=null;
-    pos.forEach(po=>po.items.forEach(I=>{
-      if(I.statusLabel==='Completed') return;
-      if(!crit||stRank(I.statusLabel)<stRank(crit.statusLabel)||
-        (stRank(I.statusLabel)===stRank(crit.statusLabel)&&(I.slip||0)>(crit.slip||0))) crit=I;
-    }));
-    rows.push({h:30,cells:[
-      T(P.name,ST.BOLD),T(P.statusLabel,STATUS_TINT[P.statusLabel]||ST.BODY),
-      T(String(P.vendorKeys.size),ST.CEN),T(pct(P.actualPct)+'  vs  '+pct(P.expectedPct),ST.CEN),
-      N(P.delayDays||0,ST.CEN_B),
-      pd,pa,pe,pc,
-      fp,fo,fn,fs,
-      T(crit?crit.name:'\u2014',ST.BODY),
-      T(crit?(crit.qty.total?num(crit.qty.delivered)+' / '+num(crit.qty.total)+' units':'no qty tracked'):'\u2014',ST.CEN),
-      T(crit?crit.statusLabel:'\u2014',crit?(STATUS_TINT[crit.statusLabel]||ST.CEN):ST.CEN),
-      crit?D(crit.edd):T('\u2014',ST.CEN)]});
-  });
-  const note=rows.length+1;
-  rows.push({h:8,cells:[]});
-  rows.push({h:20,cells:[T((m.hasProcData?'':'Procurement columns are blank because this project has no isProcurementMilestone flags in MMT. ')
-    +(m.hasFatData?'':'FAT columns are blank because this project has no isFATMilestone flags in MMT.')
-    +(m.hasProcData&&m.hasFatData?'Procurement % is weighted by each milestone\u2019s planned duration.':''),ST.NOTE)]});
-  merges.push('A'+(note+1)+':'+colName(NC)+(note+1));
-  return sheetXml(rows,{widths:[30,17,10,22,14,16,12,13,22,11,11,14,24,34,20,15,13],freeze:4,merges:merges,autoFit:true,baseH:26});
-}
-
-/* ---------- sheet 2: risk mapping ---------- */
-function xlSheetMatrix(m){
-  const M=buildMatrix(m,'all'); const rows=[]; const merges=[];
-  const T=(v,s)=>({v:v,s:s});
-  const NC=M.pkgs.length+1;
-  rows.push({h:30,cells:[T('venwiz',ST.WORD),T('OVERALL RISK MAPPING \u2014 '+m.name,ST.TITLE)].concat(Array(Math.max(0,NC-2)).fill(T('',ST.TITLE)))});
-  rows.push({h:18,cells:[T('',ST.WORD),T('',ST.SUBW)].concat(Array(Math.max(0,NC-2)).fill(T('',ST.SUBW)))});
-  merges.push('A1:A2','B1:'+colName(NC)+'1','B2:'+colName(NC)+'2');
-  rows.push({h:6,cells:[]});
-  rows.push({h:32,cells:[T('Floor / Lot',ST.HEAD)].concat(M.pkgs.map(p=>T(p,ST.HEAD)))});
-  M.units.forEach(u=>{
-    const cells=[T(u,ST.BOLD)];
-    M.pkgs.forEach(p=>{
-      const c=M.cells[u+'||'+p];
-      if(!c){ cells.push(T('\u2014',ST.BODY)); return; }
-      const runs=xlRun(c.allComplete?'Delivered':c.worst,{b:true,sz:11})
-        +(c.qty.total?xlRun('\n'+num(c.qty.delivered)+' / '+num(c.qty.total)+' units',{b:true,sz:10}):'')
-        +(!c.allComplete&&c.maxEDD?xlRun('\nEDD '+fmtD(c.maxEDD),{sz:8,color:'FF6B7280'}):'');
-      cells.push({v:runs,t:'r',s:STATUS_TINT[c.worst]||ST.BODY});
-    });
-    rows.push({h:44,cells:cells});
-  });
-  return sheetXml(rows,{widths:[22].concat(M.pkgs.map(()=>20)),freeze:4,merges:merges,autoFit:true,baseH:30});
-}
-
-/* ---------- sheet 3: issues / actionables ---------- */
-function xlSheetIssues(m){
-  const rows=[]; const merges=[];
-  const T=(v,s)=>({v:v,s:s});
-  const D=(v,s)=>(v?{v:v,t:'d',s:s==null?ST.DATE:s}:null);
-  const HEAD=['Raised','Package','Vendor','Raised On','Issue / Action','Category','Contributor','Responsible','Status','Resolved','Resolution'];
-  const open=m.issues.filter(i=>i.status==='open').length;
-  rows.push({h:30,cells:[T('venwiz',ST.WORD),T('ISSUES / ACTIONABLES \u2014 '+m.name,ST.TITLE)].concat(Array(HEAD.length-2).fill(T('',ST.TITLE)))});
-  rows.push({h:18,cells:[T('',ST.WORD),T(m.issues.length+' raised \u00b7 '+open+' open \u00b7 '+(m.issues.length-open)+' closed',ST.SUBW)]
-    .concat(Array(HEAD.length-2).fill(T('',ST.SUBW)))});
-  merges.push('A1:A2','B1:'+colName(HEAD.length)+'1','B2:'+colName(HEAD.length)+'2');
-  rows.push({h:6,cells:[]});
-  rows.push({h:30,cells:HEAD.map(h=>T(h,ST.HEAD))});
-  const sorted=[...m.issues].sort((a,b)=>(a.status===b.status?String(b.raised||'').localeCompare(String(a.raised||'')):(a.status==='open'?-1:1)));
-  sorted.forEach(i=>{
-    const scope=i.itemName?(i.itemName+(i.msName?' \u2014 '+i.msName:'')):(i.msName?i.msName:'PO level');
-    rows.push({cells:[
-      D(i.raised),T(i.pkg,ST.BODY),T(i.vendor,ST.BODY),T(scope,ST.WRAP),T(i.text,ST.WRAP),
-      T(i.category,ST.BODY),T(i.contributor||'\u2014',ST.BODY),T(i.who,ST.BODY),
-      T(i.status==='open'?'Open':'Closed', i.status==='open'?ST.T_HIGH:ST.T_CMP),
-      D(i.resolved),T(i.resolutionComment||'',ST.WRAP)]});
-  });
-  if(!m.issues.length) rows.push({cells:[T('No issues or actions have been raised in MMT for this project.',ST.SUB)]});
-  const W=[12,18,28,34,60,18,14,20,11,12,38];
-  return sheetXml(rows,{widths:W,freeze:4,merges:merges,autoFit:true,baseH:24,
-    filter:m.issues.length?('A4:'+colName(HEAD.length)+(4+sorted.length)):null});
-}
-
-/* ---------- workbook ---------- */
-function buildReportXlsx(){
-  const m=model();
-  const sheets=[
-    {name:'Executive Summary',xml:xlSheetExec(m)},
-    {name:'Risk Deep Dive',xml:xlSheetDeepDive(m)},
-    {name:'Overall Risk Mapping',xml:xlSheetMatrix(m)},
-    {name:'Issues & Actionables',xml:xlSheetIssues(m)}
-  ];
-  const files=[
-    {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-      +'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-      +'<Default Extension="xml" ContentType="application/xml"/>'
-      +'<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
-      +sheets.map((s,i)=>'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('')
-      +'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
-      +'</Types>'},
-    {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-      +'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
-      +'</Relationships>'},
-    {name:'xl/workbook.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<workbook xmlns="'+XL_NS+'" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-      +'<sheets>'+sheets.map((s,i)=>'<sheet name="'+xesc(s.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>').join('')+'</sheets>'
-      +'</workbook>'},
-    {name:'xl/_rels/workbook.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-      +sheets.map((s,i)=>'<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>').join('')
-      +'<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
-      +'</Relationships>'},
-    {name:'xl/styles.xml',data:stylesXml()}
-  ].concat(sheets.map((s,i)=>({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:s.xml})));
-  return zipStore(files);
-}
-function downloadReport(btn){
-  try{
-    if(btn){ btn.disabled=true; btn.textContent='Preparing\u2026'; }
-    const bytes=buildReportXlsx();
-    const m=model();
-    const stamp=new Date().toISOString().slice(0,10).split('-').reverse().join('');
-    const fname='CtrlS_Expediting_Report_'+m.name.replace(/[^A-Za-z0-9]+/g,'_')+'_'+stamp+'.xlsx';
-    const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },1500);
-  }catch(e){
-    console.error(e); alert('Could not build the report: '+(e.message||e));
-  }finally{
-    if(btn){ btn.disabled=false; btn.textContent='\u2193 Download Report'; }
-  }
-}
-
 /* ================================================================
    EVENTS + INIT
    ================================================================ */
@@ -2067,7 +1624,6 @@ document.addEventListener('click', e=>{
     case 'pop-close': closePop(); break;
     case 'pop-back': popBack(); break;
     case 'retry': init(); break;
-    case 'download-report': downloadReport(t); break;
     case 'goto-actions': switchTab('actions'); closePop(); window.scrollTo({top:0}); break;
     case 'exec-view': EXEC_VIEW=t.dataset.v; EXEC_SORT=(EXEC_VIEW==='pkg'?'attention':'uar'); EXEC_Q=''; document.getElementById('execList').innerHTML=execListHTML(model()); break;
     case 'open-pkg': openPkgPopup(t.dataset.pkg); break;
@@ -2140,7 +1696,6 @@ document.getElementById('tabs').addEventListener('click', e=>{
 function setTabsEnabled(on){
   document.querySelectorAll('.tab').forEach(t=>{ t.disabled=!on; t.style.opacity=on?'':'0.45'; t.style.cursor=on?'':'default'; });
   const sel=document.getElementById('projectSelect'); if(sel) sel.disabled=!on;
-  const dl=document.querySelector('.dl-btn'); if(dl) dl.disabled=!on;
 }
 let LOAD_TIMERS=[];
 function clearLoadTimers(){ LOAD_TIMERS.forEach(clearTimeout); LOAD_TIMERS=[]; }

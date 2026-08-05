@@ -388,45 +388,6 @@ table.matrix.compact .mcell-empty{font-size:10px}
 .dl-btn:hover:not(:disabled){background:var(--accent);border-color:var(--accent)}
 .dl-btn:disabled{opacity:.55;cursor:default}
 @media(max-width:600px){.dl-btn{padding:6px 10px;font-size:11px;margin-right:8px}}
-.dl-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:9999;display:flex;align-items:center;gap:14px;
-  background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 10px 30px rgba(15,23,40,.32);max-width:min(560px,92vw)}
-.dl-toast[hidden]{display:none}
-.dl-toast .dt-b b{font-size:12.5px;font-weight:800}
-.dl-toast .dt-f{font-size:11px;color:#c3c9d3;margin-top:1px;word-break:break-all}
-.dl-toast .dt-n{font-size:10.5px;color:#a8b4c4;margin-top:4px;max-width:330px}
-.dl-toast .dt-links{display:flex;flex-direction:column;gap:5px;align-items:stretch}
-.dl-toast .dt-a{background:var(--accent);color:#fff;border-radius:7px;padding:9px 16px;font-size:12px;font-weight:700;
-  text-decoration:none;white-space:nowrap;text-align:center}
-.dl-toast .dt-a:hover{background:#0057ad}
-.dl-toast .dt-alt{color:#c3c9d3;font-size:10.5px;font-weight:700;text-decoration:underline;text-align:center;white-space:nowrap}
-.dl-toast .dt-alt:hover{color:#fff}
-.dl-toast .dt-x{background:none;border:none;color:#8a94a6;font-size:13px;cursor:pointer;padding:2px 4px}
-.dpr{font-size:12.5px}
-.dpr-sec{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);
-  margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-.dpr-sec:first-child{margin-top:0}
-.dpr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 14px}
-.dpr-grid label{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:800;
-  letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
-.dpr-grid label.wide{grid-column:1/-1}
-.dpr-grid input,.dpr-grid select{border:1px solid var(--line);border-radius:7px;padding:8px 10px;
-  font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink);text-transform:none;letter-spacing:0}
-.dpr-grid input:focus,.dpr-grid select:focus{outline:none;border-color:var(--accent)}
-.dpr-inline{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--ink-2);text-transform:none;letter-spacing:0}
-.dpr-inline input{width:82px}
-.dpr-hint{font-size:10.5px;font-weight:600;color:var(--ink-3);text-transform:none;letter-spacing:0}
-.dpr-projects{margin-top:12px}
-.dpr-lab{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
-.dpr-chk{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;
-  margin-bottom:6px;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer}
-.dpr-note{margin-top:14px;padding:10px 12px;border:1px solid #fde68a;background:#fffbeb;border-radius:7px;
-  font-size:11.5px;font-weight:600;color:#92400e}
-.dpr-note:empty{display:none}
-.dpr-actions{display:flex;justify-content:flex-end;margin-top:16px}
-.dpr-go{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 26px;
-  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
-.dpr-go:hover:not(:disabled){background:var(--accent)}
-.dpr-go:disabled{opacity:.6;cursor:default}
 .retry-btn{margin-top:16px;border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:9px 22px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .retry-btn:hover{background:var(--accent);border-color:var(--accent)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -438,10 +399,7 @@ table.matrix.compact .mcell-empty{font-size:10px}
   <div class="brand">CtrlS Dashboard</div>
   <select id="projectSelect" aria-label="Select project"></select>
   <div class="spacer"></div>
-  <button class="dl-btn" data-act="download-report" title="Download the weekly expediting report (Excel)">↓ Weekly Report</button>
-  <!-- ==DPR BUTTON== hidden until the MMT activity feed is live. Delete hidden="" to bring it back;
-       all daily-report code below is intact and self-contained. -->
-  <button class="dl-btn" data-act="open-dpr" hidden title="Generate a vendor visit daily progress report">↓ Daily Report</button>
+  <button class="dl-btn" data-act="download-report" title="Download this project as an Excel report">↓ Download Report</button>
   <div class="fresh" id="freshness"></div>
 </header>
 
@@ -468,7 +426,6 @@ table.matrix.compact .mcell-empty{font-size:10px}
    embedded sample payload is used (preview = production).
    ================================================================ */
 const ENDPOINT_URL = "https://api.venwiz.com/dashboard-dump?workspaceId=6a1fd0e3cbc276a31ff1e733"; // CtrlS workspace
-const WORKSPACE_ID = "6a1fd0e3cbc276a31ff1e733";
 const FETCH_TIMEOUT_MS = 90000; /* MMT workspace dumps currently take 20\u201330s; 90s leaves headroom */
 
 /* ---------- status normalization (first layer, per tech contract) ---------- */
@@ -758,7 +715,7 @@ function decorateIssue(is,ctx){
   else if(/venwiz\./.test(email)) owner='Venwiz';
   else if(!email && !at.companyName) owner=(is.contributor==='Client')?'CtrlS':'Vendor';
   const who=[at.firstName,at.lastName].filter(Boolean).join(' ').trim() || at.companyName || (email?email.split('@')[0]:'') || '—';
-  return { raw:is, id:is.id||null, text:is.text||'', status:(String(is.status||'open').toLowerCase()==='closed')?'closed':'open',
+  return { raw:is, text:is.text||'', status:(String(is.status||'open').toLowerCase()==='closed')?'closed':'open',
     raised:is.raisedDate||null, resolved:is.resolutionDate||null, resolutionComment:is.resolutionComment||null,
     category:(is.categoryName||'General').trim(), owner, who, contributor:(is.contributor||'').trim()||null, delayDays:is.delayDaysContributed!=null?is.delayDaysContributed:null,
     level:ctx.level, pkg:ctx.pkg, vendor:ctx.vendor, poIdx:ctx.po?ctx.po.idx:null, poNumber:ctx.po?ctx.po.poNumber:null,
@@ -1655,7 +1612,7 @@ function zipStore(files){
   const u16=v=>[v&0xFF,(v>>8)&0xFF];
   const u32=v=>[v&0xFF,(v>>8)&0xFF,(v>>16)&0xFF,(v>>>24)&0xFF];
   files.forEach(f=>{
-    const name=enc.encode(f.name), data=f.bytes||enc.encode(f.data), crc=crc32(data);
+    const name=enc.encode(f.name), data=enc.encode(f.data), crc=crc32(data);
     const local=[].concat([0x50,0x4B,0x03,0x04],u16(20),u16(0),u16(0),u16(dosTime),u16(dosDate),
       u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0));
     parts.push(new Uint8Array(local),name,data);
@@ -1815,7 +1772,7 @@ function xlSheetExec(m){
   const fill=(n,st)=>Array(n).fill(T('',st));
   const NCOL=13;   /* 3 dispatch + 7 risk + 3 actions */
 
-  rows.push({h:34,cells:[T('venwiz',ST.WORD),T('WEEKLY EXPEDITING REPORT \u2014 '+m.name,ST.TITLE)].concat(fill(NCOL-2,ST.TITLE))});
+  rows.push({h:34,cells:[T('venwiz',ST.WORD),T('CtrlS EXPEDITING REPORT \u2014 '+m.name,ST.TITLE)].concat(fill(NCOL-2,ST.TITLE))});
   rows.push({h:22,cells:[T('',ST.WORD),T('Generated from MMT on '+fmtDT(RAW.lastUpdated),ST.SUBW)].concat(fill(NCOL-2,ST.SUBW))});
   merges.push('A1:A2','B1:'+colName(NCOL)+'1','B2:'+colName(NCOL)+'2');
 
@@ -2069,639 +2026,22 @@ function buildReportXlsx(){
   ].concat(sheets.map((s,i)=>({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:s.xml})));
   return zipStore(files);
 }
-function isFramed(){ try{ return window.self!==window.top; }catch(e){ return true; } }
-function bytesToDataUri(bytes,mime){
-  let bin='', CH=0x8000;
-  for(let i=0;i<bytes.length;i+=CH) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+CH));
-  return 'data:'+mime+';base64,'+btoa(bin);
-}
-function saveBlob(bytes,filename,mime){
-  let url=null;
-  try{ url=URL.createObjectURL(new Blob([bytes],{type:mime})); }catch(e){ console.error('blob url failed',e); }
-  let auto=false;
-  if(url){
-    try{
-      const a=document.createElement('a');
-      a.href=url; a.download=filename;      /* no target \u2014 a new tab is blocked inside sandboxed frames */
-      a.style.display='none'; document.body.appendChild(a);
-      a.click(); a.remove(); auto=true;
-    }catch(e){ console.error('auto-download blocked',e); }
-  }
-  let alt=null;
-  try{ alt=bytesToDataUri(bytes,mime); }catch(e){ console.error('data uri failed',e); }
-  showDlToast(url,alt,filename,auto);
-  if(url) setTimeout(()=>{ try{URL.revokeObjectURL(url);}catch(e){} },600000);
-}
-function showDlToast(url,alt,filename,auto){
-  let t=document.getElementById('dlToast');
-  if(!t){ t=document.createElement('div'); t.id='dlToast'; t.className='dl-toast'; document.body.appendChild(t); }
-  const framed=isFramed();
-  t.innerHTML='<div class="dt-b"><b>'+(auto?'File ready':'Download blocked by the browser')+'</b>'
-    +'<div class="dt-f">'+esc(filename)+'</div>'
-    +(framed?'<div class="dt-n">This page is running inside a preview frame, which blocks saving. '
-      +'Open the dashboard in its own browser tab and the download will work normally.</div>':'')
-    +'</div>'
-    +'<div class="dt-links">'
-      +(url?'<a class="dt-a" href="'+url+'" download="'+esc(filename)+'">Save file</a>':'')
-      +(alt?'<a class="dt-alt" href="'+alt+'" download="'+esc(filename)+'">Alternate link</a>':'')
-    +'</div>'
-    +'<button class="dt-x" data-act="dl-close" aria-label="Dismiss">\u2715</button>';
-  t.hidden=false;
-  clearTimeout(showDlToast._t);
-  showDlToast._t=setTimeout(()=>{ t.hidden=true; },180000);
-}
-
 function downloadReport(btn){
   try{
     if(btn){ btn.disabled=true; btn.textContent='Preparing\u2026'; }
     const bytes=buildReportXlsx();
     const m=model();
-    const d0=new Date();
-    const stamp=String(d0.getDate()).padStart(2,'0')
-      +d0.toLocaleDateString('en-GB',{month:'short'}).replace('Sept','Sep')+d0.getFullYear();
-    const fname='CtrlS-Weekly_Expediting_Report_'+m.name.replace(/^CtrlS\s*/i,'').replace(/[^A-Za-z0-9]+/g,'_')
-      +'_'+stamp+'.xlsx';
-    saveBlob(bytes,fname,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    const stamp=new Date().toISOString().slice(0,10).split('-').reverse().join('');
+    const fname='CtrlS_Expediting_Report_'+m.name.replace(/[^A-Za-z0-9]+/g,'_')+'_'+stamp+'.xlsx';
+    const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },1500);
   }catch(e){
     console.error(e); alert('Could not build the report: '+(e.message||e));
   }finally{
     if(btn){ btn.disabled=false; btn.textContent='\u2193 Download Report'; }
   }
-}
-
-
-/* ================================================================
-   DOCX WRITER — self-contained OOXML (reuses zipStore/crc32 above)
-   ================================================================ */
-const W_NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
-  +' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
-  +' xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'
-  +' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
-  +' xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"';
-const EMU=914400;                       /* EMU per inch */
-let DOC_MEDIA=[], DOC_RID=100;
-
-function wRun(text,o){
-  o=o||{};
-  const rpr='<w:rPr>'+(o.b?'<w:b/>':'')+(o.i?'<w:i/>':'')
-    +(o.color?'<w:color w:val="'+o.color+'"/>':'')
-    +(o.bg?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.bg+'"/>':'')
-    +'<w:sz w:val="'+Math.round((o.sz||10)*2)+'"/><w:szCs w:val="'+Math.round((o.sz||10)*2)+'"/>'
-    +(o.caps?'<w:caps/>':'')+(o.u?'<w:u w:val="single"/>':'')+'</w:rPr>';
-  const parts=String(text==null?'':text).split('\n');
-  return parts.map((seg,ix)=>'<w:r>'+rpr+(ix?'<w:br/>':'')+'<w:t xml:space="preserve">'+xesc(seg)+'</w:t></w:r>').join('');
-}
-function wP(runs,o){
-  o=o||{};
-  const ppr='<w:pPr>'
-    +(o.align?'<w:jc w:val="'+o.align+'"/>':'')
-    +(o.shd?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.shd+'"/>':'')
-    +(o.border?'<w:pBdr><w:bottom w:val="single" w:sz="'+(o.borderSz||8)+'" w:space="1" w:color="'+o.border+'"/></w:pBdr>':'')
-    +'<w:spacing w:before="'+(o.before!=null?o.before:40)+'" w:after="'+(o.after!=null?o.after:40)+'" w:line="240" w:lineRule="auto"/>'
-    +(o.ind?'<w:ind w:left="'+o.ind+'"/>':'')
-    +(o.keep?'<w:keepNext/>':'')
-    +'</w:pPr>';
-  return '<w:p>'+ppr+(runs||'')+'</w:p>';
-}
-function wText(text,o){ return wP(wRun(text,o),o); }
-function wBand(text,fill,o){
-  o=o||{};
-  return wP(wRun(text,{b:true,sz:o.sz||11,color:o.color||'FFFFFF',caps:o.caps}),
-    {shd:fill,before:o.before!=null?o.before:160,after:o.after!=null?o.after:80,keep:true});
-}
-function wSpacer(h){ return wP('',{before:0,after:h||60}); }
-function wPageBreak(){ return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'; }
-
-function ensureP(x){ x=x||''; return /<\/w:p>\s*$/.test(x)?x:(x+wP('',{before:0,after:0})); }
-function wCell(content,o){
-  o=o||{};
-  return '<w:tc><w:tcPr><w:tcW w:w="'+(o.w||2000)+'" w:type="dxa"/>'
-    +(o.shd?'<w:shd w:val="clear" w:color="auto" w:fill="'+o.shd+'"/>':'')
-    +(o.span?'<w:gridSpan w:val="'+o.span+'"/>':'')
-    +'<w:vAlign w:val="'+(o.valign||'center')+'"/><w:tcMar><w:top w:w="60" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/>'
-    +'<w:left w:w="90" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tcMar></w:tcPr>'
-    +ensureP(content)+'</w:tc>';
-}
-function wTable(rows,widths,o){
-  o=o||{};
-  const border=(w,c)=>'<w:'+w+' w:val="single" w:sz="4" w:space="0" w:color="'+(c||'D5DAE2')+'"/>';
-  return '<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblLayout w:type="fixed"/>'
-    +'<w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(s=>border(s)).join('')+'</w:tblBorders>'
-    +'</w:tblPr><w:tblGrid>'+widths.map(w=>'<w:gridCol w:w="'+w+'"/>').join('')+'</w:tblGrid>'
-    +rows.join('')+'</w:tbl>'+(o.after===false?'':wSpacer(80));
-}
-function wRow(cells,o){
-  o=o||{};
-  return '<w:tr>'+(o.header?'<w:trPr><w:tblHeader/></w:trPr>':'')+cells.join('')+'</w:tr>';
-}
-/* key/value grid used for the visit header */
-function wKV(pairs,widths){
-  const rows=[];
-  for(let i=0;i<pairs.length;i+=2){
-    const a=pairs[i], b=pairs[i+1]||['',''];
-    rows.push(wRow([
-      wCell(wText(a[0],{b:true,sz:8.5,color:'6B7280',caps:true}),{w:widths[0],shd:'F7F8FA'}),
-      wCell(wText(a[1]||'\u2014',{sz:10}),{w:widths[1]}),
-      wCell(wText(b[0],{b:true,sz:8.5,color:'6B7280',caps:true}),{w:widths[0],shd:'F7F8FA'}),
-      wCell(wText(b[1]||'\u2014',{sz:10}),{w:widths[1]})
-    ]));
-  }
-  return wTable(rows,[widths[0],widths[1],widths[0],widths[1]]);
-}
-/* image: data is a base64 string (no prefix) */
-function wImage(b64,ext,wIn,hIn){
-  const id=DOC_RID++;
-  const name='media'+id+'.'+(ext||'png');
-  DOC_MEDIA.push({rid:'rId'+id,name:name,b64:b64,ext:ext||'png'});
-  const cx=Math.round((wIn||1.5)*EMU), cy=Math.round((hIn||1.5)*EMU);
-  return '<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">'
-    +'<wp:extent cx="'+cx+'" cy="'+cy+'"/><wp:effectExtent l="0" t="0" r="0" b="0"/>'
-    +'<wp:docPr id="'+id+'" name="Picture '+id+'"/><wp:cNvGraphicFramePr/>'
-    +'<a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-    +'<pic:pic><pic:nvPicPr><pic:cNvPr id="'+id+'" name="'+name+'"/><pic:cNvPicPr/></pic:nvPicPr>'
-    +'<pic:blipFill><a:blip r:embed="rId'+id+'"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
-    +'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="'+cx+'" cy="'+cy+'"/></a:xfrm>'
-    +'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>'
-    +'</a:graphicData></a:graphic></wp:inline></w:drawing></w:r>';
-}
-function b64ToBytes(b64){
-  const bin=atob(b64); const out=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i);
-  return out;
-}
-function buildDocx(bodyXml){
-  const sect='<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'
-    +'<w:pgMar w:top="720" w:right="680" w:bottom="720" w:left="680" w:header="360" w:footer="360" w:gutter="0"/></w:sectPr>';
-  const doc='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    +'<w:document '+W_NS+'><w:body>'+bodyXml+sect+'</w:body></w:document>';
-  const styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    +'<w:styles '+W_NS+'><w:docDefaults><w:rPrDefault><w:rPr>'
-    +'<w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:sz w:val="20"/><w:szCs w:val="20"/>'
-    +'<w:color w:val="1F2933"/></w:rPr></w:rPrDefault>'
-    +'<w:pPrDefault><w:pPr><w:spacing w:after="40" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault>'
-    +'</w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
-  const rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-    +'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-    +'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
-    +DOC_MEDIA.map(m=>'<Relationship Id="'+m.rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/'+m.name+'"/>').join('')
-    +'</Relationships>';
-  const exts=[...new Set(DOC_MEDIA.map(m=>m.ext))];
-  const files=[
-    {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-      +'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-      +'<Default Extension="xml" ContentType="application/xml"/>'
-      +exts.map(e=>'<Default Extension="'+e+'" ContentType="image/'+(e==='jpg'?'jpeg':e)+'"/>').join('')
-      +'<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
-      +'<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'
-      +'</Types>'},
-    {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-      +'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-      +'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
-      +'</Relationships>'},
-    {name:'word/document.xml',data:doc},
-    {name:'word/styles.xml',data:styles},
-    {name:'word/_rels/document.xml.rels',data:rels}
-  ].concat(DOC_MEDIA.map(m=>({name:'word/media/'+m.name,bytes:b64ToBytes(m.b64)})));
-  return zipStore(files);
-}
-
-/* ================================================================
-   DAILY PROGRESS / VENDOR VISIT REPORT
-   ================================================================ */
-const ACTIVITY_URL = null;   /* TODO tech: /dashboard-dump/activity — comments, critical updates,
-                                milestone movement and image payloads for a time window.
-                                While null, sections 2 & 3 render an explicit "awaiting feed" note. */
-const CHECKLISTS={
-  'panel':{label:'Panel / electrical assembly (PDU, LT & MV panels, UPS, CSS)',items:[
-    'Approved GA, SLD and BOI register available',
-    'MfC date established; lead-time clock started',
-    'PO status and FAT plan confirmed',
-    'Incoming material checks \u2014 breakers, busbars, transformer, enclosure',
-    'Assembly WIP \u2014 per-unit status against ordered quantity',
-    'Routine tests per IEC 61439',
-    'FAT readiness \u2014 observation points cleared',
-    'Sub-OEM / bought-out PO status and supply schedule',
-    'Cabinet fabrication clearance and supply schedule',
-    'Production capacity vs need-by date',
-    'Storage and handling space for finished units',
-    'Vendor commitment on recovery plan captured']},
-  'rotating':{label:'Rotating / mechanical (pumps, DG sets, chillers, PAHU, FWU)',items:[
-    'Approved GA and datasheet register available',
-    'MfC date established; lead-time clock started',
-    'Casting / fabrication status of major components',
-    'Bought-out receipt \u2014 motor, coupling, base frame, controls',
-    'Assembly WIP \u2014 per-unit status against ordered quantity',
-    'Performance / routine test bed availability',
-    'FAT readiness and inspection call status',
-    'Sub-OEM PO status and supply schedule',
-    'Painting, packing and dispatch readiness',
-    'Vendor commitment on recovery plan captured']},
-  'fabrication':{label:'Fabrication / tanks and structures (TST tanks, skids)',items:[
-    'Approved fabrication drawings and WPS/PQR',
-    'Raw material \u2014 plate / section receipt and MTC verification',
-    'Cutting, rolling and fit-up status',
-    'Welding progress and welder qualification',
-    'NDT / radiography status',
-    'Hydro test readiness',
-    'Surface preparation and painting',
-    'Dispatch clearance and transport plan',
-    'Vendor commitment on recovery plan captured']},
-  'generic':{label:'Generic expediting checklist',items:[
-    'Pre-visit documents reviewed',
-    'Vendor identity and plant location confirmed',
-    'Manufacturing clearance status',
-    'Bought-out and sub-vendor position',
-    'Work-in-progress against ordered quantity',
-    'Inspection and FAT plan',
-    'Dispatch and logistics readiness',
-    'Commitments captured with target dates']}
-};
-const C={navy:'1E2A3A',band:'334155',line:'D5DAE2',soft:'F7F8FA',muted:'6B7280',
-  red:'B42318',redbg:'FDECEA',amber:'B45309',amberbg:'FEF4E2',green:'186C3C',greenbg:'E9F6EC',
-  blue:'175CD3',bluebg:'E8F1FC',accent:'0066CC'};
-const STCOL={'Delayed':[C.red,C.redbg],'High Risk':['B54708','FDF0E7'],'Medium Risk':[C.amber,C.amberbg],
-  'Low Risk':['7A6008','FCF8E0'],'On Track':[C.blue,C.bluebg],'Completed':[C.green,C.greenbg],
-  'Not Yet Started':['475569','F1F5F9']};
-
-/* ---------- activity feed (new API) ---------- */
-async function fetchActivity(vendor,projects,sinceISO){
-  if(!ACTIVITY_URL) return {available:false,comments:[],critical:[],movement:[],images:{}};
-  const u=ACTIVITY_URL+'?workspaceId='+encodeURIComponent(WORKSPACE_ID)
-    +'&vendorName='+encodeURIComponent(vendor)+'&since='+encodeURIComponent(sinceISO);
-  const res=await fetch(u,{cache:'no-store'});
-  if(!res.ok) throw new Error('Activity feed returned HTTP '+res.status);
-  const j=await res.json();
-  const out={available:true,comments:[],critical:[],movement:[],images:j.issueImages||{}};
-  (j.activity||[]).forEach(a=>{
-    if(a.type==='comment') out.comments.push(a);
-    else if(a.type==='critical_update') out.critical.push(a);
-    else out.movement.push(a);
-  });
-  return out;
-}
-
-/* ---------- image helpers: fetch URL -> bytes -> base64, keep aspect ratio ---------- */
-function bytesToB64(buf){
-  let bin='', CH=0x8000;
-  for(let i=0;i<buf.length;i+=CH) bin+=String.fromCharCode.apply(null,buf.subarray(i,i+CH));
-  return btoa(bin);
-}
-function imgDim(b){
-  if(b[0]===0x89&&b[1]===0x50) return {w:(b[16]<<24|b[17]<<16|b[18]<<8|b[19])>>>0,h:(b[20]<<24|b[21]<<16|b[22]<<8|b[23])>>>0};
-  if(b[0]===0xFF&&b[1]===0xD8){
-    let i=2;
-    while(i<b.length){
-      if(b[i]!==0xFF){ i++; continue; }
-      const m=b[i+1];
-      if(m>=0xC0&&m<=0xCF&&m!==0xC4&&m!==0xC8&&m!==0xCC) return {h:b[i+5]<<8|b[i+6], w:b[i+7]<<8|b[i+8]};
-      i+=2+(b[i+2]<<8|b[i+3]);
-    }
-  }
-  return null;
-}
-async function fetchImage(url){
-  try{
-    const res=await fetch(url,{cache:'no-store'});
-    if(!res.ok) return null;
-    const buf=new Uint8Array(await res.arrayBuffer());
-    if(buf.length>4*1024*1024) return null;
-    const ct=(res.headers.get('content-type')||'').toLowerCase();
-    const ext=ct.indexOf('png')>=0?'png':(ct.indexOf('gif')>=0?'gif':'jpg');
-    return {b64:bytesToB64(buf),ext:ext,dim:imgDim(buf)};
-  }catch(e){ return null; }
-}
-async function resolveImages(act){
-  const all=[];
-  const collect=a=>{ (a.images||[]).forEach(im=>{ if(im.url&&!im.b64) all.push(im); }); };
-  (act.comments||[]).forEach(collect); (act.critical||[]).forEach(collect); (act.movement||[]).forEach(collect);
-  Object.keys(act.images||{}).forEach(k=>(act.images[k]||[]).forEach(im=>{ if(im.url&&!im.b64) all.push(im); }));
-  let i=0;
-  async function worker(){
-    while(i<all.length){
-      const im=all[i++];
-      const got=await fetchImage(im.url);
-      if(got){ im.b64=got.b64; im.ext=got.ext; im.dim=got.dim; } else { im.failed=true; }
-    }
-  }
-  await Promise.all([worker(),worker(),worker(),worker(),worker(),worker()]);
-  return act;
-}
-/* photo strip: up to 3 per row, aspect preserved, thin border via a bordered cell */
-function wPhotos(images){
-  const usable=(images||[]).filter(im=>im.b64);
-  const failed=(images||[]).filter(im=>im.failed);
-  let out='';
-  if(usable.length){
-    let run='';
-    usable.slice(0,6).forEach((im,ix)=>{
-      const W=1.55, ar=(im.dim&&im.dim.w&&im.dim.h)?(im.dim.h/im.dim.w):0.72;
-      const H=Math.max(0.62,Math.min(1.5,W*ar));
-      run+=wImage(im.b64,im.ext,W,H)+wRun('   ',{sz:9});
-      if((ix+1)%3===0){ out+=wP(run,{before:20,after:10}); run=''; }
-    });
-    if(run) out+=wP(run,{before:20,after:10});
-    const caps=usable.slice(0,6).map((im,ix)=>im.caption?('P'+(ix+1)+' '+im.caption):null).filter(Boolean);
-    if(caps.length) out+=wText(caps.join('     '),{sz:7.5,color:C.muted,before:0,after:20});
-  }
-  if(failed.length) out+=wText(failed.length+' photo'+(failed.length>1?'s':'')+' could not be embedded (check CORS on the image host)',
-    {sz:7.5,color:C.muted,before:0,after:20});
-  return out;
-}
-/* card = single-cell table with a coloured left rule; reads as a block in Word */
-function wCard(inner,accent,fill){
-  const b=(side,sz,col)=>'<w:'+side+' w:val="single" w:sz="'+sz+'" w:space="0" w:color="'+col+'"/>';
-  return '<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblLayout w:type="fixed"/>'
-    +'<w:tblBorders>'+b('top',4,C.line)+b('left',24,accent||C.accent)+b('bottom',4,C.line)+b('right',4,C.line)
-    +'</w:tblBorders></w:tblPr><w:tblGrid><w:gridCol w:w="9900"/></w:tblGrid>'
-    +'<w:tr>'+wCell(inner,{w:9900,shd:fill||'FFFFFF'})+'</w:tr></w:tbl>'+wSpacer(50);
-}
-/* label/value metric grid, N per row, wraps onto further rows */
-function wMetrics(pairs,perRow,firstFill){
-  perRow=perRow||5;
-  const rows=[]; const w=Math.floor(9900/perRow);
-  for(let i=0;i<pairs.length;i+=perRow){
-    const slice=pairs.slice(i,i+perRow);
-    const cells=slice.map((p,ix)=>wCell(
-      wText(p[0],{b:true,sz:7.5,color:C.muted,caps:true,align:'center',before:70,after:0})
-      +wText(p[1],{b:true,sz:14,color:p[2]||'1F2933',align:'center',before:20,after:70}),
-      {w:w,shd:(i===0&&ix===0&&firstFill)?firstFill:C.soft}));
-    while(cells.length<perRow) cells.push(wCell(wText(''),{w:w,shd:C.soft}));
-    rows.push(wRow(cells));
-  }
-  return wTable(rows,Array(perRow).fill(w));
-}
-
-/* ---------- report composition ---------- */
-function dprVendorSet(){
-  const set={};
-  MODELS.forEach((m,pi)=>m.pos.forEach(P=>{ (set[P.vendorKey]=set[P.vendorKey]||{name:P.vendor,projects:new Set()}).projects.add(pi); }));
-  return Object.values(set).sort((a,b)=>a.name.localeCompare(b.name));
-}
-function statusChip(label){
-  const c=STCOL[label]||['1F2933','F7F8FA'];
-  return wCell(wText(label,{b:true,sz:9,color:c[0],align:'center'}),{w:1500,shd:c[1]});
-}
-
-
-function dprBody(cfg){
-  DOC_MEDIA=[]; DOC_RID=100;
-  const act=cfg.activity, vendor=cfg.vendor;
-  let b='';
-  /* ---- masthead: vendor is the headline ---- */
-  b+=wP(wRun('venwiz',{b:true,sz:13,color:'4DA3FF'})
-    +wRun('        VENDOR VISIT REPORT',{b:true,sz:9,color:'A8B4C4'}),{shd:C.navy,before:0,after:0});
-  b+=wP(wRun(vendor,{b:true,sz:22,color:'FFFFFF'}),{shd:C.navy,before:0,after:0});
-  b+=wP(wRun('Generated '+cfg.issuedDate+(cfg.lastVisit?'     \u00b7     Previous visit '+cfg.lastVisit:''),
-    {sz:9,color:'C3C9D3'}),{shd:C.navy,before:0,after:140});
-
-  /* ---- 1 visit details ---- */
-  b+=wBand('1  \u00b7  VISIT DETAILS',C.band,{before:0});
-  b+=wKV([
-    ['Report reference',cfg.ref],['Visit date',cfg.visitDate],
-    ['Visit type',cfg.visitType],['Report issued',cfg.issuedDate],
-    ['Expediter',cfg.expediter],['Cluster head',cfg.clusterHead],
-    ['Vendor SPOC met',cfg.spoc],['Sub-vendors / OEM present',cfg.subVendors],
-    ['Plant address',cfg.plant],['Visit start \u2013 end',(cfg.timeIn||'')+(cfg.timeOut?' \u2013 '+cfg.timeOut:'')]
-  ],[1550,3400]);
-
-  /* ---- per project ---- */
-  let pn=0;
-  cfg.projects.forEach(pi=>{
-    const m=MODELS[pi];
-    const pos=m.pos.filter(P=>P.vendor===vendor);
-    if(!pos.length) return;
-    pn++;
-    if(pn>1) b+=wPageBreak();
-    b+=wBand('2.'+pn+'  \u00b7  PROJECT \u2014 '+m.name.toUpperCase(),C.navy,{sz:12});
-    const tot=pos.reduce((a,P)=>({t:a.t+(P.qty.total||0),d:a.d+(P.qty.delivered||0),e:a.e+(P.qty.expectedTillDate||0)}),{t:0,d:0,e:0});
-    const R=rollup(vendor,pos,'vendor');
-    const gap=Math.max(0,tot.e-tot.d);
-    b+=wMetrics([
-      ['Total qty',num(tot.t)],
-      ['Dispatched',num(tot.d)],
-      ['Due till date',num(tot.e)],
-      ['Shortfall',num(gap),gap?C.red:C.green],
-      ['Actual progress',pct(R.actualPct),(R.expectedPct-R.actualPct)>1?C.red:C.green],
-      ['Expected progress',pct(R.expectedPct)],
-      ['Est delay',(R.slip||0)>0?'+'+R.slip+' d':'On plan',(R.slip||0)>0?C.red:C.green]],7);
-
-    /* ---- packages ---- */
-    const byPkg={}; pos.forEach(P=>{ (byPkg[P.pkg]=byPkg[P.pkg]||[]).push(P); });
-    const pkgNames=Object.keys(byPkg).sort();
-    pkgNames.forEach((pkName,pi2)=>{
-      b+=wBand('PACKAGE '+String.fromCharCode(65+pi2)+'  \u00b7  '+pkName
-        +'   ('+byPkg[pkName].length+' PO'+(byPkg[pkName].length>1?'s':'')+')',C.band,{sz:11,before:200});
-      byPkg[pkName].forEach(P=>{ b+=dprPO(P,act,cfg); });
-    });
-  });
-
-  /* ---- checklist: one blank row for the expediter to extend ---- */
-  b+=wBand('3  \u00b7  VISIT CHECKLIST & NOTES',C.band,{sz:11,before:220});
-  const tpl=(cfg.checklist&&CHECKLISTS[cfg.checklist])?CHECKLISTS[cfg.checklist].items:[];
-  const rows=[wRow([
-    wCell(wText('#',{b:true,sz:8.5,color:'FFFFFF',align:'center'}),{w:500,shd:C.band}),
-    wCell(wText('Checklist item / note',{b:true,sz:8.5,color:'FFFFFF'}),{w:4400,shd:C.band}),
-    wCell(wText('\u2713 / \u2717 / \u2014',{b:true,sz:8.5,color:'FFFFFF',align:'center'}),{w:1100,shd:C.band}),
-    wCell(wText('Observation / committed date',{b:true,sz:8.5,color:'FFFFFF'}),{w:3900,shd:C.band})],{header:true})];
-  tpl.forEach((it,i)=>rows.push(wRow([
-    wCell(wText(String(i+1),{sz:9.5,align:'center'}),{w:500}),
-    wCell(wText(it,{sz:9.5}),{w:4400}),
-    wCell(wText(''),{w:1100}),wCell(wText(''),{w:3900})])));
-  rows.push(wRow([
-    wCell(wText(tpl.length?String(tpl.length+1):'',{sz:9.5,align:'center'}),{w:500}),
-    wCell(wText(''),{w:4400}),wCell(wText(''),{w:1100}),wCell(wText(''),{w:3900})]));
-  b+=wTable(rows,[500,4400,1100,3900]);
-  return b;
-}
-
-/* ---------- one PO ---------- */
-function dprPO(P,act,cfg){
-  let b='';
-  const codeTxt=P.projectCode?'   \u00b7   '+P.projectCode:'';
-  b+=wP(wRun('PO '+P.poNumber+codeTxt,{b:true,sz:12,color:'FFFFFF'})
-    +wRun('      '+P.desc,{sz:9.5,color:'C3C9D3'}),{shd:'2E3D4F',before:170,after:0,keep:true});
-  const zero=P.qty.total===0;
-  const sc=(STCOL[P.statusLabel]||[]);
-  b+=wMetrics([['Status',P.statusLabel,sc[0]],
-    ['Qty',zero?'\u2014':num(P.qty.total)],
-    ['Dispatched',zero?'\u2014':num(P.qty.delivered)],
-    ['Due till date',zero?'\u2014':num(P.qty.expectedTillDate)],
-    ['Actual',pct(P.actualPct),(P.expectedPct-P.actualPct)>1?C.red:C.green],
-    ['Expected',pct(P.expectedPct)],
-    ['PDD',fmtD(P.cdd)],['EDD',fmtD(P.edd)],
-    ['Est delay',(P.slip||0)>0?'+'+P.slip+' d':'On plan',(P.slip||0)>0?C.red:C.green],
-    ['Open actions',String(P.openIssues||0),(P.openIssues?C.red:C.green)]],5,sc[1]);
-
-  /* --- open issues, grouped by the level they were raised at --- */
-  const groups={};
-  const push=(k,o)=>{ (groups[k]=groups[k]||[]).push(o); };
-  P.issues.forEach(i=>{ if(i.status==='open') push('PO level',i); });
-  P.items.forEach(I=>{
-    I.issues.forEach(i=>{ if(i.status==='open') push('Lot  \u00b7  '+I.name,i); });
-    I.milestones.forEach(M=>M.issues.forEach(i=>{ if(i.status==='open') push('Milestone  \u00b7  '+M.name+'   ('+I.name+')',i); }));
-  });
-  const gk=Object.keys(groups);
-  if(gk.length){
-    const n=gk.reduce((a,k)=>a+groups[k].length,0);
-    b+=wP(wRun('Open issues & actionables',{b:true,sz:11.5,color:C.navy})
-      +wRun('     '+n+' open',{b:true,sz:10,color:C.red}),{before:150,after:60,border:C.navy,borderSz:12,keep:true});
-    gk.forEach(k=>{
-      b+=wP(wRun(k,{b:true,sz:9.5,color:'FFFFFF'})
-        +wRun('     '+groups[k].length+' issue'+(groups[k].length>1?'s':''),{sz:8.5,color:'C3C9D3'}),
-        {shd:'5A6878',before:90,after:40,keep:true});
-      groups[k].forEach(i=>{
-        const isNew=i.raised && cfg.sinceDate && i.raised>=cfg.sinceDate;
-        let inner=wP((isNew?wRun(' NEW ',{b:true,sz:7.5,color:'FFFFFF',bg:C.green})+wRun('    ',{sz:8}):'')
-          +wRun((i.category||'General'),{b:true,sz:8.5,color:C.navy})
-          +wRun(i.contributor?('     '+i.contributor):'',{sz:8.5,color:C.muted}),{before:20,after:30});
-        inner+=wText(String(i.text||'').replace(/\n{3,}/g,'\n\n').trim(),{sz:10,before:0,after:30});
-        inner+=wText('Raised '+fmtD(i.raised)+'     \u00b7     Responsible: '+(i.who||'\u2014')
-          +((i.delayDays||0)>0?'     \u00b7     '+i.delayDays+' delay days attributed':''),
-          {sz:8,color:C.muted,before:0,after:20});
-        const imgs=(act.images||{})[i.id]||[];
-        if(imgs.length) inner+=wPhotos(imgs);
-        b+=wCard(inner,isNew?C.green:C.red,isNew?'F6FDF8':'FFFFFF');
-      });
-    });
-  }
-
-  /* --- comments & critical updates since last visit --- */
-  const inWin=l=>(l||[]).filter(a=>a.poNumber===P.poNumber);
-  const cu=inWin(act.critical), cm=inWin(act.comments);
-  if(!act.available){
-    b+=wText('Comments & critical updates since the last visit \u2014 awaiting the MMT activity feed.',
-      {i:true,sz:8.5,color:C.muted,before:100,after:40});
-  } else if(cu.length||cm.length){
-    b+=wP(wRun('Comments & critical updates',{b:true,sz:11.5,color:C.navy})
-      +wRun('     since the last visit',{sz:9.5,color:C.muted}),{before:150,after:60,border:C.navy,borderSz:12,keep:true});
-    cu.concat(cm).forEach(a=>{
-      const crit=a.type==='critical_update';
-      const where=(a.level==='po'?'PO level':a.level==='item'?('Lot  \u00b7  '+a.itemName)
-        :('Milestone  \u00b7  '+a.milestoneName+(a.itemName?'   ('+a.itemName+')':'')));
-      let inner=wP((crit?wRun(' CRITICAL UPDATE ',{b:true,sz:7.5,color:'FFFFFF',bg:C.red})+wRun('    ',{sz:8}):'')
-        +wRun(where,{b:true,sz:9,color:C.navy})
-        +wRun('     '+fmtD(String(a.at||'').slice(0,10)),{sz:8,color:C.muted}),{before:20,after:30});
-      inner+=wText(a.text,{sz:10,before:0,after:20});
-      if(a.images&&a.images.length) inner+=wPhotos(a.images);
-      b+=wCard(inner,crit?C.red:C.blue,crit?'FFF9F9':'FFFFFF');
-    });
-  }
-
-  /* --- phase movement since last visit, one row per lot --- */
-  const mv=inWin(act.movement);
-  if(!act.available){
-    b+=wText('Phase movement since the last visit \u2014 awaiting the MMT activity feed.',
-      {i:true,sz:8.5,color:C.muted,before:60,after:120});
-  } else {
-    b+=wP(wRun('Phase movement',{b:true,sz:11.5,color:C.navy})
-      +wRun('     since the last visit',{sz:9.5,color:C.muted}),{before:150,after:60,border:C.navy,borderSz:12,keep:true});
-    const byItem={};
-    mv.forEach(a=>{ const k=a.itemName||'\u2014'; (byItem[k]=byItem[k]||[]).push(a); });
-    const moved=Object.keys(byItem);
-    if(!moved.length){
-      b+=wText('No phase progress recorded on any lot of this PO since the last visit.',{sz:9.5,color:C.muted,after:120});
-    }else{
-      const rows=[wRow([
-        wCell(wText('Lot / item',{b:true,sz:8.5,color:'FFFFFF'}),{w:2700,shd:C.band}),
-        wCell(wText('Actual',{b:true,sz:8.5,color:'FFFFFF',align:'center'}),{w:1100,shd:C.band}),
-        wCell(wText('Expected',{b:true,sz:8.5,color:'FFFFFF',align:'center'}),{w:1200,shd:C.band}),
-        wCell(wText('Movement since last visit',{b:true,sz:8.5,color:'FFFFFF'}),{w:4900,shd:C.band})],{header:true})];
-      moved.forEach(nm=>{
-        const I=P.items.find(x=>x.name===nm);
-        const txt=byItem[nm].map(a=>(a.phase?a.phase+'  \u00b7  ':'')+(a.milestoneName?a.milestoneName+': ':'')
-          +((a.from&&a.from.label)||'\u2014')+'  \u2192  '+((a.to&&a.to.label)||'\u2014')).join('\n');
-        rows.push(wRow([
-          wCell(wText(nm,{b:true,sz:9.5}),{w:2700,valign:'top'}),
-          wCell(wText(I?pct(I.actualPct):'\u2014',{b:true,sz:10,align:'center'}),{w:1100,valign:'top'}),
-          wCell(wText(I?pct(I.expectedPct):'\u2014',{sz:10,align:'center'}),{w:1200,valign:'top'}),
-          wCell(wText(txt,{sz:9.5}),{w:4900,valign:'top'})]));
-      });
-      b+=wTable(rows,[2700,1100,1200,4900]);
-      const rest=P.items.length-moved.length;
-      if(rest>0) b+=wText(rest+' other lot'+(rest>1?'s':'')+' on this PO recorded no phase movement since the last visit.',
-        {sz:8.5,color:C.muted,before:0,after:120});
-    }
-  }
-  b+=wSpacer(140);
-  return b;
-}
-
-/* ---------- generation ---------- */
-async function generateDPR(cfg,btn){
-  try{
-    if(btn){ btn.disabled=true; btn.textContent='Building\u2026'; }
-    const since=(cfg.sinceDate?new Date(cfg.sinceDate):new Date(Date.now()-86400000)).toISOString();
-    cfg.activity=await resolveImages(await fetchActivity(cfg.vendor,cfg.projects,since));
-    const bytes=buildDocx(dprBody(cfg));
-    const stamp=new Date().toISOString().slice(0,10).split('-').reverse().join('');
-    const fn='DPR_'+cfg.vendor.replace(/[^A-Za-z0-9]+/g,'_').slice(0,40)+'_'+stamp+'.docx';
-    saveBlob(bytes,fn,'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    closePop();
-  }catch(e){ console.error(e); alert('Could not build the report: '+(e.message||e)); }
-  finally{ if(btn){ btn.disabled=false; btn.textContent='Generate report'; } }
-}
-
-/* ---------- popup ---------- */
-function openDPRPopup(){
-  const vendors=dprVendorSet();
-  const today=new Date().toISOString().slice(0,10);
-  const body='<div class="dpr">'
-    +'<div class="dpr-sec">1 · Scope</div>'
-    +'<div class="dpr-grid">'
-      +'<label>Vendor<select id="dprVendor">'+vendors.map((v,i)=>'<option value="'+i+'">'+esc(v.name)+'</option>').join('')+'</select></label>'
-      +'<label>Previous visit date<input type="date" id="dprSince">'
-        +'<span class="dpr-hint">everything since this date counts as movement in the report</span></label>'
-    +'</div>'
-    +'<div class="dpr-projects" id="dprProjects"></div>'
-    +'<div class="dpr-sec">2 · Visit details</div>'
-    +'<div class="dpr-grid">'
-      +'<label>Report reference<input id="dprRef" placeholder="e.g. RISHABH-005"></label>'
-      +'<label>Visit type<select id="dprType"><option>Routine</option><option>Follow-up visit</option><option>Pre-FAT</option><option>FAT</option><option>Escalation</option></select></label>'
-      +'<label>Visit date<input type="date" id="dprDate" value="'+today+'"></label>'
-      +'<label>Expediter<input id="dprExp" placeholder="Name"></label>'
-      +'<label>Cluster head<input id="dprHead" placeholder="Name"></label>'
-      +'<label>Vendor SPOC met<input id="dprSpoc" placeholder="Name, designation"></label>'
-      +'<label>Sub-vendors / OEM present<input id="dprSub" placeholder="Names or NIL"></label>'
-      +'<label class="wide">Plant address visited<input id="dprPlant" placeholder="Unit, plot, city"></label>'
-      +'<label>Start time<input id="dprIn" placeholder="10:45 am"></label>'
-      +'<label>End time<input id="dprOut" placeholder="4:00 pm"></label>'
-    +'</div>'
-    +'<div class="dpr-sec">3 · Checklist template</div>'
-    +'<div class="dpr-grid"><label class="wide">Attach checklist<select id="dprChecklist">'
-      +'<option value="">None</option>'
-      +Object.keys(CHECKLISTS).map(k=>'<option value="'+k+'">'+esc(CHECKLISTS[k].label)+'</option>').join('')
-    +'</select><span class="dpr-hint">Items print with blank tick and observation columns to fill in Word.</span></label></div>'
-    +'<div class="dpr-note" id="dprNote"></div>'
-    +'<div class="dpr-actions"><button class="dpr-go" data-act="dpr-go">Generate report</button></div>'
-  +'</div>';
-  openPop({title:'Daily Progress Report',sub:'vendor visit \u00b7 Word format',body:body});
-  const vsel=document.getElementById('dprVendor');
-  const paint=()=>{
-    const v=vendors[+vsel.value];
-    document.getElementById('dprProjects').innerHTML='<div class="dpr-lab">Projects to include</div>'
-      +MODELS.map((m,i)=>v.projects.has(i)
-        ? '<label class="dpr-chk"><input type="checkbox" class="dprP" value="'+i+'" checked> '+esc(m.name)
-          +' <span class="dpr-hint">'+m.pos.filter(P=>P.vendor===v.name).length+' PO(s)</span></label>'
-        : '').join('');
-    document.getElementById('dprNote').innerHTML=ACTIVITY_URL?''
-      :'Comments, critical updates and phase movement need the MMT activity feed. Until that endpoint is live '
-      +'those sections print a short note instead; everything else is generated from live data.';
-  };
-  vsel.addEventListener('change',paint); paint();
-}
-function collectDPR(){
-  const vendors=dprVendorSet();
-  const v=vendors[+document.getElementById('dprVendor').value];
-  const projects=[...document.querySelectorAll('.dprP:checked')].map(c=>+c.value);
-  const val=id=>{ const el=document.getElementById(id); return el?el.value.trim():''; };
-  return {vendor:v.name,projects:projects.length?projects:[...v.projects],
-    sinceDate:val('dprSince')||null,lastVisit:val('dprSince')?fmtD(val('dprSince')):'',
-    ref:val('dprRef'),visitType:val('dprType'),
-    visitDate:val('dprDate')?fmtD(val('dprDate')):'',issuedDate:fmtD(new Date().toISOString().slice(0,10)),
-    expediter:val('dprExp'),clusterHead:val('dprHead'),spoc:val('dprSpoc'),
-    subVendors:val('dprSub'),plant:val('dprPlant'),timeIn:val('dprIn'),timeOut:val('dprOut'),
-    checklist:val('dprChecklist')};
 }
 
 /* ================================================================
@@ -2728,9 +2068,6 @@ document.addEventListener('click', e=>{
     case 'pop-back': popBack(); break;
     case 'retry': init(); break;
     case 'download-report': downloadReport(t); break;
-    case 'open-dpr': openDPRPopup(); break;
-    case 'dl-close': { const el=document.getElementById('dlToast'); if(el) el.hidden=true; break; }
-    case 'dpr-go': generateDPR(collectDPR(),t); break;
     case 'goto-actions': switchTab('actions'); closePop(); window.scrollTo({top:0}); break;
     case 'exec-view': EXEC_VIEW=t.dataset.v; EXEC_SORT=(EXEC_VIEW==='pkg'?'attention':'uar'); EXEC_Q=''; document.getElementById('execList').innerHTML=execListHTML(model()); break;
     case 'open-pkg': openPkgPopup(t.dataset.pkg); break;
@@ -2803,9 +2140,7 @@ document.getElementById('tabs').addEventListener('click', e=>{
 function setTabsEnabled(on){
   document.querySelectorAll('.tab').forEach(t=>{ t.disabled=!on; t.style.opacity=on?'':'0.45'; t.style.cursor=on?'':'default'; });
   const sel=document.getElementById('projectSelect'); if(sel) sel.disabled=!on;
-  document.querySelectorAll('.dl-btn:not([hidden])').forEach(b=>{ b.disabled=!on;
-    b.title=on?(b.dataset.act==='open-dpr'?'Generate a vendor visit report':'Download the weekly expediting report (Excel)')
-      :'Available once the dashboard finishes loading data'; });
+  const dl=document.querySelector('.dl-btn'); if(dl) dl.disabled=!on;
 }
 let LOAD_TIMERS=[];
 function clearLoadTimers(){ LOAD_TIMERS.forEach(clearTimeout); LOAD_TIMERS=[]; }
